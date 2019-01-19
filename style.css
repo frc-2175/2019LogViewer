@@ -1,5 +1,13 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Roboto;
+    display: flex;
+    flex-direction: column; 
+    height: 100vh;
+    overflow: hidden;
 }
 
 h1 {
@@ -13,4 +21,17 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+main {
+    flex-grow: 1;
+    position: relative;
+}
+
+#chartContainer {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    position: absolute;
 }
