@@ -1,3 +1,16 @@
+body {
+    font-family: Roboto;
+}
+
 h1 {
     color: blue;
+}
+
+header {
+    border-bottom: blue solid 2px;
+    font-size: 18px;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
