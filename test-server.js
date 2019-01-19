@@ -10,7 +10,7 @@ http.createServer(function (req, res) {
     // parse URL
     const parsedUrl = url.parse(req.url);
     // extract URL path
-    let pathname = `.${parsedUrl.pathname}`;
+    let pathname = 'TestData/' + `.${parsedUrl.pathname}`;
     // based on the URL path, extract the file extention. e.g. .js, .doc, ...
     const ext = path.parse(pathname).ext;
     // maps file extention to MIME typere
@@ -50,20 +50,29 @@ http.createServer(function (req, res) {
             return;
         }
 
-        // if is a directory search for index file matching the extention
-        if (fs.statSync(pathname).isDirectory()) pathname += '/index' + ext;
+        // if is a directory send the contents of the directory
+        if (fs.statSync(pathname).isDirectory()) {
+            fs.readdir(pathname, function(err, files) {
+                if(!err) {
+                    res.setHeader('Content-type', 'text/plain');
+                    res.end(files.join('\n'));
+                }
+            });
+        } else {
+            // read file from file system
+            fs.readFile(pathname, function (err, data) {
+                if (err) {
+                    res.statusCode = 500;
+                    res.end(`Error getting the file: ${err}.`);
+                } else {
+                    // if the file is found, set Content-type and send data
+                    res.setHeader('Content-type', map[ext] || 'text/plain');
+                    res.end(data);
+                }
+            });
+        }
+            
 
-        // read file from file system
-        fs.readFile(pathname, function (err, data) {
-            if (err) {
-                res.statusCode = 500;
-                res.end(`Error getting the file: ${err}.`);
-            } else {
-                // if the file is found, set Content-type and send data
-                res.setHeader('Content-type', map[ext] || 'text/plain');
-                res.end(data);
-            }
-        });
     });
 
 
